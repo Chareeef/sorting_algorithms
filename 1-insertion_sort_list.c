@@ -1,64 +1,46 @@
 #include "sort.h"
 
 /**
- *
- *
- *
- *
+ * insertion_sort_list - implementation of the insertion sort algorithm
+ * @list: the doubly linked list to sort
  */
-
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *tmp, *temp, *new_node, *head, *tail, *curr = *list, *sorted_list = NULL;
+	listint_t *to_be_next, *to_be_first;
+	listint_t *current, *compared, *next_node;
 
-	if (curr == NULL || curr->next == NULL)
+	if (!list || !(*list) || !((*list)->next))
 		return;
 
-	while (curr && curr->next)
+	current = (*list)->next;
+
+	while (current)
 	{
-		if (curr->n > curr->next->n)
+		compared = current;
+		next_node = current->next;
+
+		while (compared->prev && compared->n < compared->prev->n)
 		{
-			tmp = curr;
-			curr = curr->next;
-			curr->next = tmp;
+			to_be_first = compared;
+			to_be_next = compared->prev;
 
-			if (sorted_list == NULL)
-			{
-				/* sorted_list = malloc(sizeof(listint_t)); */
-				sorted_list = curr;
-				sorted_list->prev = NULL;
-				sorted_list->next = NULL;
-			}
-			else
-			{
-				/* new_node = malloc(sizeof(listint_t)); */
-				new_node = curr;
-				new_node->next = NULL;
-				new_node->prev = NULL;
+			if (to_be_next == *list)
+				*list = to_be_first;
 
-				head = sorted_list;
+			if (to_be_next->prev)
+				to_be_next->prev->next = to_be_first;
+			if (to_be_first->next)
+				to_be_first->next->prev = to_be_next;
 
-				while (head)
-				{
-					head = head->next;
-				}
-				new_node->prev = head;
-				head->next = new_node;
-				tail = new_node;
+			to_be_next->next = to_be_first->next;
+			to_be_first->prev = to_be_next->prev;
 
-				while (tail)
-				{
-					if (tail->n < tail->prev->n)
-					{
-						temp = tail;
-						tail = tail->prev;
-						tail->prev = temp;
-					}
-					tail = tail->prev;
-				}
-			}
+			to_be_next->prev = to_be_first;
+			to_be_first->next = to_be_next;
+
 			print_list(*list);
 		}
-		curr = curr->next;
+
+		current = next_node;
 	}
 }
