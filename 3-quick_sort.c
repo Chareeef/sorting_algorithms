@@ -5,18 +5,20 @@
  * @array: the array to sort
  * @size: the array's size
  */
+
+void partition(int low, int high, int *array, size_t size);
+
 void quick_sort(int *array, size_t size)
 {
-	size_t pivot;
-	size_t i, j, temp_index;
-	int temp_int;
-
-	if (size < 1)
+	if (array == NULL || size <= 1)
 		return;
 
-	pivot = size - 1;
-	i = 0;
-	j = size - 2;
+	partition(0, size - 1, array, size);
+}
+
+void partition(int low, int high, int *array, size_t size)
+{
+	size_t pivot = high, i = low, j = high - 1, tmp = 0;
 
 	while (i < j)
 	{
@@ -25,28 +27,24 @@ void quick_sort(int *array, size_t size)
 		while (array[j] > array[pivot])
 			j--;
 
-		temp_int = array[i];
-		array[i] = array[j];
-		array[j] = temp_int;
+		if (i < j)
+		{
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
 
-		print_array(array, size);
+			print_array(array, size);
 
-		i++;
-		j--;
+			i++;
+			j--;
+		}
 	}
 
-	temp_int = array[i];
+	tmp = array[i];
 	array[i] = array[pivot];
-	array[pivot] = temp_int;
-
+	array[pivot] = tmp;
 	print_array(array, size);
 
-	temp_index = i;
-	i = pivot;
-	pivot = temp_index;
-
-	/*
-	quick_sort(array, pivot);
-	quick_sort(array + pivot, i - pivot);
-	*/
+	partition(0, i - 1, array, size);
+	partition(i + 1, size - 1, array, size);
 }
