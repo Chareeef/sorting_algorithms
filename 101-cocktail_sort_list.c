@@ -33,6 +33,7 @@ void cocktail_sort_list(listint_t **list)
 				tmp1 = curr->prev;
 
 				swap_them(tmp, tmp1, list);
+				printf("this comes from head\n")
 
 				print_list(*list);
 				swap += 1;
@@ -47,6 +48,7 @@ void cocktail_sort_list(listint_t **list)
 				tmp1 = tail->prev;
 
 				swap_them(tmp, tmp1, list);
+				printf("this comes from tail\n")
 
 				print_list(*list);
 				swap += 1;
