@@ -20,13 +20,13 @@ void swap_and_print(size_t i, size_t j, int *array, size_t size)
 }
 
 /**
- * partition - partition a subarray around a pivot
+ * lomuto_partition - partition a subarray around a pivot (Lomuto)
  * @start: starting index of the subarray
  * @end: ending index of the subarray
  * @array: pointer to the array to sort
  * @size: the array's size
  */
-void partition(size_t start, size_t end, int *array, size_t size)
+void lomuto_partition(size_t start, size_t end, int *array, size_t size)
 {
 	size_t pivot, i, j;
 
@@ -50,13 +50,13 @@ void partition(size_t start, size_t end, int *array, size_t size)
 
 	pivot = i;
 	if (pivot > start + 1)
-		partition(start, pivot - 1, array, size);
+		lomuto_partition(start, pivot - 1, array, size);
 	if (pivot < end - 1)
-		partition(pivot + 1, end, array, size);
+		lomuto_partition(pivot + 1, end, array, size);
 }
 
 /**
- * quick_sort - implementation of the quick sort algorithm
+ * quick_sort - implementation of the quick sort algorithm (Lomuto)
  * @array: pointer to the array to sort
  * @size: the array's size
  */
@@ -65,5 +65,5 @@ void quick_sort(int *array, size_t size)
 	if (array == NULL || size <= 1)
 		return;
 
-	partition(0, size - 1, array, size);
+	lomuto_partition(0, size - 1, array, size);
 }
