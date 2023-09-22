@@ -25,37 +25,58 @@ void swap_and_print(size_t i, size_t j, int *array, size_t size)
  * @end: ending index of the subarray
  * @array: pointer to the array to sort
  * @size: the array's size
+ *
+ * Return: new pivot's index
  */
-void hoare_partition(size_t start, size_t end, int *array, size_t size)
+size_t hoare_partition(size_t start, size_t end, int *array, size_t size)
 {
-	size_t i, j, idx_pivot;
+	size_t i, j;
 	int pivot;
 
 	pivot = array[end];
-	idx_pivot = end;
-	i = start;
-	j = end - 1;
+	i = start - 1;
+	j = end + 1;
 
-	while (i < j)
+	while (1)
 	{
-		while (array[i] < pivot)
+		do {
 			i++;
-		while (array[j] > pivot && j > 0)
-			j--;
+		} while (array[i] < pivot);
 
-		if (i < j)
+		do {
+			j--;
+		} while (array[j] > pivot);
+
+		if (i >= j)
 		{
-			swap_and_print(i, j, array, size);
+			return (i);
 		}
+
+		if (i != j)
+			swap_and_print(i, j, array, size);
 	}
 
-	swap_and_print(i, idx_pivot, array, size);
-	idx_pivot = i;
+	return (-1);
+}
 
-	if (idx_pivot > 1)
-		hoare_partition(0, idx_pivot - 1, array, size);
-	if (idx_pivot < end - 1)
-		hoare_partition(idx_pivot + 1, end, array, size);
+/**
+ * help_quick_sort_hoare - helper function for quick_sort_hoare
+ * @start: starting index of the subarray
+ * @end: ending index of the subarray
+ * @array: pointer to the array to sort
+ * @size: the array's size
+ */
+void help_quick_sort_hoare(size_t start, size_t end, int *array, size_t size)
+{
+	size_t idx_pivot;
+
+	if (start < end)
+	{
+		idx_pivot = hoare_partition(start, end, array, size);
+
+		help_quick_sort_hoare(start, idx_pivot - 1, array, size);
+		help_quick_sort_hoare(idx_pivot, end, array, size);
+	}
 }
 
 /**
@@ -68,5 +89,5 @@ void quick_sort_hoare(int *array, size_t size)
 	if (!array || size <= 1)
 		return;
 
-	hoare_partition(0, size - 1, array, size);
+	help_quick_sort_hoare(0, size - 1, array, size);
 }
