@@ -15,7 +15,8 @@ void swap_and_print(size_t i, size_t j, int *array, size_t size)
 	array[i] = array[j];
 	array[j] = temp;
 
-	print_array(array, size);
+	if (i != j)
+		print_array(array, size);
 }
 
 /**
@@ -33,28 +34,19 @@ void partition(size_t start, size_t end, int *array, size_t size)
 		return;
 
 	pivot = end;
-	i = start;
-	j = end - 1;
+	i = start - 1;
 
-	while (i < j)
+	for (j = start; j < end; j++)
 	{
-		while (array[i] < array[pivot] && i < size)
-			i++;
-		while (array[j] > array[pivot] && j > 0)
-			j--;
-
-		if (i < j)
+		if (array[j] <= array[pivot])
 		{
-			swap_and_print(i, j, array, size);
 			i++;
-			j--;
+			swap_and_print(i, j, array, size);
 		}
 	}
 
-	if (array[i] > array[pivot])
-	{
-		swap_and_print(i, pivot, array, size);
-	}
+	i++;
+	swap_and_print(i, pivot, array, size);
 
 	pivot = i;
 	if (pivot > start + 1)
