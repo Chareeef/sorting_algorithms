@@ -35,10 +35,10 @@ void counting_sort(int *array, size_t size)
 
 	print_array(aux, max);
 
-	for (i = 0; i < size; i++)
+	for (i = size - 1; (int) i >= 0; i--)
 	{
+		sortedArray[aux[array[i]] - 1] = array[i];
 		aux[array[i]]--;
-		sortedArray[aux[array[i]]] = array[i];
 	}
 	for (i = 0; i < size; i++)
 		array[i] = sortedArray[i];
