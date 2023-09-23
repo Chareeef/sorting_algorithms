@@ -35,6 +35,7 @@ void quick_sort_hoare(int *array, size_t size);
 void help_quick_sort_hoare(size_t start, size_t end, int *array, size_t size);
 void shell_sort(int *array, size_t size);
 void cocktail_sort_list(listint_t **list);
+void counting_sort(int *array, size_t size);
 
 /* helper functions */
 
