@@ -2,84 +2,82 @@
 
 /**
  * cocktail_sort_list - Cocktail shaker sort algorithm
- * @tmp: node to be swapped
- * @tmp1: to be swapped with
  * @list: a double pointer to the head of a doubly linked list
  */
-
-void swap_them(listint_t *tmp, listint_t *tmp1, listint_t **list);
-
 void cocktail_sort_list(listint_t **list)
 {
-	listint_t *curr = *list, *tmp, *tmp1, *tail;
-	int swap, len = 0;
+	listint_t *curr, *head, *tail, *next_node, *prev_node;
+	int swap;
 
-	while (curr != NULL)
+	if (!list || !(*list) || !((*list)->next))
+		return;
+	head = *list;
+	while (1)
 	{
-		curr = curr->next;
-		len++;
-	}
-	tail = curr;
-
-	curr = (*list)->next;
-	while (len > 0)
-	{
+		curr = head;
+		swap = 0;
+		while (curr && curr->next)
+		{
+			next_node = curr->next;
+			if (curr->n > curr->next->n)
+			{
+				swap_them_and_print(curr->next, curr, &head, list);
+				swap = 1;
+			}
+			curr = next_node;
+		}
+		tail = curr->prev;
+		if (!swap)
+			return;
+		curr = tail;
 		swap = 0;
 		while (curr && curr->prev)
 		{
-			if (curr->n < curr->prev->n)
+			prev_node = curr->prev;
+			if (curr->prev->n > curr->n)
 			{
-				tmp = curr;
-				tmp1 = curr->prev;
-
-				swap_them(tmp, tmp1, list);
-
-				print_list(*list);
-				swap += 1;
+				swap_them_and_print(curr, curr->prev, &head, list);
+				swap = 1;
 			}
-			curr = curr->next;
+			curr = prev_node;
 		}
-		while (tail != NULL)
-		{
-			if (tail->n < tail->prev->n)
-			{
-				tmp = tail;
-				tmp1 = tail->prev;
-
-				swap_them(tmp, tmp1, list);
-
-				print_list(*list);
-				swap += 1;
-			}
-			tail = tail->prev;
-		}
-		curr = (*list)->next;
-		if (swap == 0)
-			break;
-		len--;
+		if (!swap)
+			return;
+		head = head->next;
+		tail = tail->prev;
 	}
 }
 
 /**
- * swap_them - swaps two nodes
- * @tmp: first node to swap
- * @tmp1: second node to swap
+ * swap_them_and_print - swaps two nodes
+ * @to_be_before: node to be swapped
+ * @to_be_next: to be swapped with
+ * @head: head of the list
  * @list: a double pointer to the list we are sorting
  */
-
-void swap_them(listint_t *tmp, listint_t *tmp1, listint_t **list)
+void swap_them_and_print(listint_t *to_be_before, listint_t *to_be_next,
+		listint_t **head, listint_t **list)
 {
-	if (tmp1 == *list)
-		*list = tmp;
+	if (to_be_before == *list)
+		*list = to_be_next;
+	else if (to_be_next == *list)
+		*list = to_be_before;
 
-	if (tmp1->prev)
-		tmp1->prev->next = tmp;
-	if (tmp->next)
-		tmp->next->prev = tmp1;
 
-	tmp1->next = tmp->next;
-	tmp->prev = tmp1->prev;
+	if (to_be_next->prev)
+		to_be_next->prev->next = to_be_before;
+	if (to_be_before->next)
+		to_be_before->next->prev = to_be_next;
 
-	tmp1->prev = tmp;
-	tmp->next = tmp1;
+	to_be_next->next = to_be_before->next;
+	to_be_before->prev = to_be_next->prev;
+
+	to_be_next->prev = to_be_before;
+	to_be_before->next = to_be_next;
+	print_list(*list);
+
+	if (*head == to_be_next)
+		*head = to_be_before;
+	if (*head == to_be_before)
+		*head = to_be_next;
 }

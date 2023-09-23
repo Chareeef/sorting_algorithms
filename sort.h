@@ -41,6 +41,8 @@ void cocktail_sort_list(listint_t **list);
 void print_array(const int *array, size_t size);
 void print_list(const listint_t *list);
 void swap_and_print(size_t i, size_t j, int *array, size_t size);
+void swap_them_and_print(listint_t *to_be_before, listint_t *to_be_next,
+		listint_t **head, listint_t **list);
 void lomuto_partition(size_t start, size_t end, int *array, size_t size);
 size_t hoare_partition(size_t start, size_t end, int *array, size_t size);
 
