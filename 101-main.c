@@ -40,17 +40,44 @@ listint_t *create_listint(const int *array, size_t size)
  */
 int main(void)
 {
-    listint_t *list;
-    int array[] = {19, 48, 99, 71, 13, 52, 96, 73, 86, 7};
-    size_t n = sizeof(array) / sizeof(array[0]);
+	listint_t *list;
+	int array[] = {19, 48, 99, 71, 13, 52, 96, 73, 86, 7};
+	size_t n = sizeof(array) / sizeof(array[0]);
+	int array2[] = {1, 1, 2, 3, 4, 5, 6, 6};
+	size_t n2 = sizeof(array2) / sizeof(array2[0]);
+	int array3[] = {9, 8, 7, 6, 6, 5};
+	size_t n3 = sizeof(array3) / sizeof(array3[0]);
 
-    list = create_listint(array, n);
-    if (!list)
-        return (1);
-    print_list(list);
-    printf("\n");
-    cocktail_sort_list(&list);
-    printf("\n");
-    print_list(list);
-    return (0);
+	list = create_listint(array, n);
+	if (!list)
+		return (1);
+	print_list(list);
+	printf("\n");
+	cocktail_sort_list(&list);
+	printf("\n");
+	print_list(list);
+
+	printf("\n\t[------------[\n");
+	
+	list = create_listint(array2, n2);
+	if (!list)
+		return (1);
+	print_list(list);
+	printf("\n");
+	cocktail_sort_list(&list);
+	printf("\n");
+	print_list(list);
+
+	printf("\n\t[------------[\n");
+	
+	list = create_listint(array3, n3);
+	if (!list)
+		return (1);
+	print_list(list);
+	printf("\n");
+	cocktail_sort_list(&list);
+	printf("\n");
+	print_list(list);
+
+	return (0);
 }

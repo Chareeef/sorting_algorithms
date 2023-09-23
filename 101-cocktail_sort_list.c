@@ -6,7 +6,7 @@
  */
 void cocktail_sort_list(listint_t **list)
 {
-	listint_t *curr, *head, *tail, *next_node, *prev_node;
+	listint_t *curr, *head, *tail = NULL, *next_node, *prev_node, *next_h;
 	int swap;
 
 	if (!list || !(*list) || !((*list)->next))
@@ -15,13 +15,14 @@ void cocktail_sort_list(listint_t **list)
 	while (1)
 	{
 		curr = head;
+		next_h = head->next;
 		swap = 0;
-		while (curr && curr->next)
+		while (curr && curr->next && curr->next != tail)
 		{
 			next_node = curr->next;
 			if (curr->n > curr->next->n)
 			{
-				swap_them_and_print(curr->next, curr, &head, list);
+				swap_them_and_print(curr->next, curr, list);
 				swap = 1;
 			}
 			curr = next_node;
@@ -31,20 +32,19 @@ void cocktail_sort_list(listint_t **list)
 			return;
 		curr = tail;
 		swap = 0;
-		while (curr && curr->prev)
+		while (curr && curr->prev && curr->prev != head->prev)
 		{
 			prev_node = curr->prev;
 			if (curr->prev->n > curr->n)
 			{
-				swap_them_and_print(curr, curr->prev, &head, list);
+				swap_them_and_print(curr, curr->prev, list);
 				swap = 1;
 			}
 			curr = prev_node;
 		}
 		if (!swap)
 			return;
-		head = head->next;
-		tail = tail->prev;
+		head = next_h;
 	}
 }
 
@@ -52,11 +52,10 @@ void cocktail_sort_list(listint_t **list)
  * swap_them_and_print - swaps two nodes
  * @to_be_before: node to be swapped
  * @to_be_next: to be swapped with
- * @head: head of the list
  * @list: a double pointer to the list we are sorting
  */
 void swap_them_and_print(listint_t *to_be_before, listint_t *to_be_next,
-		listint_t **head, listint_t **list)
+		listint_t **list)
 {
 	if (to_be_before == *list)
 		*list = to_be_next;
@@ -74,10 +73,6 @@ void swap_them_and_print(listint_t *to_be_before, listint_t *to_be_next,
 
 	to_be_next->prev = to_be_before;
 	to_be_before->next = to_be_next;
-	print_list(*list);
 
-	if (*head == to_be_next)
-		*head = to_be_before;
-	if (*head == to_be_before)
-		*head = to_be_next;
+	print_list(*list);
 }
