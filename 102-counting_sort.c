@@ -39,7 +39,7 @@ void counting_sort(int *array, size_t size)
 
 	print_array(aux, max);
 
-	for (i = size - 1; (int) i >= 0; i--)
+	for (i = 0; i < size; i++)
 	{
 		sortedArray[aux[array[i]] - 1] = array[i];
 		aux[array[i]]--;
