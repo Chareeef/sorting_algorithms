@@ -3,79 +3,53 @@
 /**
  * merge - Merge two subarrays using Merge sort algorithm
  *
- * @array: Array to be sorted
- * @l: left most index
- * @m: middle index
- * @r: roght most index
+ * @array: Array to be sorte/d
+ * @left: left subarray
+ * @l_size: size of left subarray
+ * @right: left subarray
+ * @r_size: size of right subarray
  */
-void merge(int *array, int l, int m, int r)
+void merge(int *array, int *left, size_t l_size, int *right, size_t r_size)
 {
-	int i, idx_sorted, idx_l, idx_r;
-	int l_size = m - l, r_size = r - m + 1, s_size = r - l + 1;
-	int *sorted_part;
+	size_t i, idx_l = 0, idx_r = 0;
+	size_t total_size = l_size + r_size;
+	int *sorted;
 
-	sorted_part = malloc(s_size * sizeof(int));
-	if (!sorted_part)
+	sorted = malloc(total_size * sizeof(int));
+	if (!sorted)
 		exit(-1);
 
-	for (idx_sorted = 0; idx_sorted < s_size; idx_sorted++)
-		sorted_part[idx_sorted] = 0;
 	printf("Merging...\n");
 	printf("[left]: ");
-	print_array(array + l, l_size);
+	print_array(left, l_size);
 	printf("[right]: ");
-	print_array(array + m, r_size);
+	print_array(right, r_size);
 
-	for (idx_sorted = 0, idx_l = l, idx_r = m;
-			idx_l < m && idx_r <= r; idx_sorted++)
+	for (i = 0; idx_l < l_size && idx_r < r_size; i++)
 	{
-		if (array[idx_l] < array[idx_r])
+		if (left[idx_l] < right[idx_r])
 		{
-			sorted_part[idx_sorted] = array[idx_l];
+			sorted[i] = left[idx_l];
 			idx_l++;
 		}
 		else
 		{
-			sorted_part[idx_sorted] = array[idx_r];
+			sorted[i] = right[idx_r];
 			idx_r++;
 		}
 	}
-	for (; idx_l < m; idx_sorted++, idx_l++)
-		sorted_part[idx_sorted] = array[idx_l];
-	for (; idx_r <= r; idx_sorted++, idx_r++)
-		sorted_part[idx_sorted] = array[idx_r];
 
-	for (i = l, idx_sorted = 0; idx_sorted < s_size; i++, idx_sorted++)
-		array[i] = sorted_part[idx_sorted];
+	for (; idx_l < l_size; idx_l++, i++)
+		sorted[i] = left[idx_l];
+	for (; idx_r < r_size; idx_r++, i++)
+		sorted[i] = right[idx_r];
+	for (i = 0; i < total_size; i++)
+		array[i] = sorted[i];
+
+	free(sorted);
+
 	printf("[Done]: ");
-	print_array(sorted_part, s_size);
-	free(sorted_part);
-}
-
-/**
- * split_and_merge - Split then merge using Merge sort algorithm
- * @array: Array to be sorted
- * @l: left most index
- * @r: right most index
- */
-void split_and_merge(int *array, int l, int r)
-{
-	int m;
-
-	if (!array || l >= r)
-		return;
-	
-	m = l + (r - l) / 2;
-
-	if (m % 2 != 0)
-		m++;
-	if (r - l == 1)
-		m = r;
-	split_and_merge(array, l, m - 1);
-	split_and_merge(array, m, r);
-
-	merge(array, l, m, r);
-
+	print_array(array, total_size);
 }
 
 /**
@@ -86,8 +60,23 @@ void split_and_merge(int *array, int l, int r)
  */
 void merge_sort(int *array, size_t size)
 {
-	if (!array || size <= 1)
+	int *left, *right;
+	size_t l_size, r_size;
+	size_t m;
+
+	if (!array || size < 2)
 		return;
 
-	split_and_merge(array, 0, size - 1);
+	m = size / 2;
+
+	left = array;
+	l_size = m;
+
+	right = array + m;
+	r_size = size - m;
+
+	merge_sort(left, l_size);
+	merge_sort(right, r_size);
+
+	merge(array, left, l_size, right, r_size);
 }
