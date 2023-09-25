@@ -1,78 +1,74 @@
 #include "sort.h"
 
 /**
+ * swap_and_print - swaps two nodes
+ * @old_prev: previous node to be next
+ * @old_next: next node to be first
+ * @list: a double pointer to the list we are sorting
+ */
+void swap_and_print(listint_t *old_prev, listint_t *old_next,
+		listint_t **list)
+{
+	if (old_prev == *list)
+		*list = old_next;
+
+	if (old_prev->prev)
+		old_prev->prev->next = old_next;
+	if (old_next->next)
+		old_next->next->prev = old_prev;
+
+	old_prev->next = old_next->next;
+	old_next->prev = old_prev->prev;
+
+	old_prev->prev = old_next;
+	old_next->next = old_prev;
+
+	print_list(*list);
+}
+/**
  * cocktail_sort_list - Cocktail shaker sort algorithm
  * @list: a double pointer to the head of a doubly linked list
  */
 void cocktail_sort_list(listint_t **list)
 {
-	listint_t *curr, *head, *tail = NULL, *next_node, *prev_node, *next_h;
+	listint_t *curr, *tail = NULL, *head = NULL;
 	int swap;
 
 	if (!list || !(*list) || !((*list)->next))
 		return;
-	head = *list;
-	while (1)
+
+	curr = *list;
+	swap = 1;
+	while  (swap)
 	{
-		curr = head;
-		next_h = head->next;
-		swap = 0;
-		while (curr && curr->next && curr->next != tail)
+		for (swap = 0; curr && curr->next && curr->next != tail;)
 		{
-			next_node = curr->next;
 			if (curr->n > curr->next->n)
 			{
-				swap_them_and_print(curr->next, curr, list);
+				swap_and_print(curr, curr->next, list);
 				swap = 1;
 			}
-			curr = next_node;
+			else
+				curr = curr->next;
 		}
-		tail = curr->prev;
 		if (!swap)
 			return;
-		curr = tail;
-		swap = 0;
-		while (curr && curr->prev && curr->prev != head->prev)
+
+		tail = curr;
+		curr = curr->prev;
+
+		for (swap = 0; curr && curr->prev != head;)
 		{
-			prev_node = curr->prev;
 			if (curr->prev->n > curr->n)
 			{
-				swap_them_and_print(curr, curr->prev, list);
+				swap_and_print(curr->prev, curr, list);
 				swap = 1;
 			}
-			curr = prev_node;
+			else
+				curr = curr->prev;
 		}
-		if (!swap)
-			return;
-		head = next_h;
+
+		head = curr;
+		curr = curr->next;
 	}
-}
-
-/**
- * swap_them_and_print - swaps two nodes
- * @to_be_before: node to be swapped
- * @to_be_next: to be swapped with
- * @list: a double pointer to the list we are sorting
- */
-void swap_them_and_print(listint_t *to_be_before, listint_t *to_be_next,
-		listint_t **list)
-{
-	if (to_be_before == *list)
-		*list = to_be_next;
-	else if (to_be_next == *list)
-		*list = to_be_before;
-
-
-	if (to_be_next->prev)
-		to_be_next->prev->next = to_be_before;
-	if (to_be_before->next)
-		to_be_before->next->prev = to_be_next;
-
-	to_be_next->next = to_be_before->next;
-	to_be_before->prev = to_be_next->prev;
-
-	to_be_next->prev = to_be_before;
-	to_be_before->next = to_be_next;
-
-	print_list(*list);
 }
