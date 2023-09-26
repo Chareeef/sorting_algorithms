@@ -21,8 +21,6 @@ void free_ints(listint_r **integers, size_t size)
 			current = temp;
 		}
 	}
-
-	free(*integers);
 }
 
 /**
@@ -67,19 +65,21 @@ listint_r *add_node_end(listint_r **head, int num)
  */
 void radix_sort(int *array, size_t size)
 {
-	listint_r **integers, *current;
+	listint_r *integers[10], *current;
 	size_t i, j, lsd;
 	int end, div;
 
-	for (end = 0, div = 10; !end; div *= 10)
+	if (!array || size < 2)
+		return;
+
+	end = 0;
+	for (div = 10; !end; div *= 10)
 	{
-		integers = malloc(10 * sizeof(listint_r *));
-		if (!integers)
-			exit(-1);
 		for (i = 0; i < 10; i++)
 			integers[i] = NULL;
 
-		for (end = 1, i = 0; i < size; i++)
+		end = 1;
+		for (i = 0; i < size; i++)
 		{
 			lsd = (array[i] / (div / 10)) % 10;
 			if (array[i] / div)
